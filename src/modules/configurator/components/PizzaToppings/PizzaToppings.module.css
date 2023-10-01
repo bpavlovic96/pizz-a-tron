@@ -1,0 +1,21 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin-bottom: 4rem;
+  margin-top: 1rem;
+}
+
+.toppingsWrapper {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+}
+
+.header {
+  font-size: 2.5rem;
+}
+
+.toppingPrice {
+  margin-top: 1rem;
+}

@@ -1,0 +1,44 @@
+.topping {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 9rem;
+  width: 6rem;
+  border: 1px solid transparent;
+  border-radius: 3.5rem;
+  justify-content: center;
+}
+
+.topping:hover {
+  background-color: #e5c3f5;
+}
+
+.emojiWrapper {
+  width: 4.75rem;
+  height: 4.75rem;
+  display: flex;
+  justify-content: center;
+  border-radius: 2.5rem;
+}
+
+.topping:hover .emojiWrapper {
+  background: #e5c3f5;
+  background: var(--colors-white, #fff);
+  box-shadow: 0px 12px 28px 0px rgba(0, 0, 0, 0.03);
+}
+
+.topping:hover .emojiWrapper {
+  background-color: #f2f2f2;
+}
+
+p {
+  font-weight: 700;
+}
+
+.toppingEmoji {
+  font-size: 1.5rem;
+}
+
+.toppingName {
+  font-size: 0.875rem;
+}
