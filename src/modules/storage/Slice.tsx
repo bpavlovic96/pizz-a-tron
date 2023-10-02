@@ -13,10 +13,24 @@ type AuthenticatedUser = {
   authenticatedUser: string;
 };
 
+type Topping = {
+  name: string;
+  price: number;
+};
+
+type CurrentConfiguration = {
+  toppings: Topping[];
+  size: string;
+  discount: undefined | boolean;
+  quantity: number;
+  total: undefined | number;
+};
+
 type StorageState = {
   hoveredTopping: HoveredTopping;
   firebaseConfig: FirebaseConfig;
   authenticatedUser: AuthenticatedUser;
+  currentConfiguration: CurrentConfiguration;
 };
 
 const initialState: StorageState = {
@@ -27,6 +41,13 @@ const initialState: StorageState = {
   firebaseConfig: {},
   authenticatedUser: {
     authenticatedUser: "",
+  },
+  currentConfiguration: {
+    toppings: [],
+    size: "",
+    discount: undefined,
+    quantity: 1,
+    total: undefined,
   },
 };
 
@@ -47,10 +68,20 @@ export const storageSlice = createSlice({
     setAuthenticatedUser: (state, action: PayloadAction<AuthenticatedUser>) => {
       state.authenticatedUser = action.payload;
     },
+    setCurrentConfiguration: (
+      state,
+      action: PayloadAction<CurrentConfiguration>
+    ) => {
+      state.currentConfiguration = action.payload;
+    },
   },
 });
 
-export const { setHoveredTopping, setFirebaseConfig, setAuthenticatedUser } =
-  storageSlice.actions;
+export const {
+  setHoveredTopping,
+  setFirebaseConfig,
+  setAuthenticatedUser,
+  setCurrentConfiguration,
+} = storageSlice.actions;
 
 export default storageSlice.reducer;

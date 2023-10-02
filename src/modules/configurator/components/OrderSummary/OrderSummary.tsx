@@ -1,6 +1,40 @@
 import styles from "./OrderSummary.module.css";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../storage/Slice";
+import { useState, useEffect, ChangeEvent } from "react";
 
 function OrderSummary() {
+  const currentConfiguration = useSelector(
+    (state: RootState) => state.storage.currentConfiguration
+  );
+
+  const [currentConfigurationQuantity, setcurrentConfigurationQuantity] =
+    useState(1);
+  const [currentConfigurationTotal, setCurrentConfigurationTotal] = useState(0);
+
+  const handleQuantityChange = (e: ChangeEvent<HTMLInputElement>) => {
+    currentConfigurationQuantity <= 0 &&
+    Number.isNaN(currentConfigurationQuantity)
+      ? setcurrentConfigurationQuantity(1)
+      : setcurrentConfigurationQuantity(parseInt(e.target.value, 10));
+  };
+
+  console.log(currentConfigurationQuantity);
+
+  useEffect(() => {
+    const calculateTotal = () => {
+      const total =
+        currentConfiguration.toppings.reduce(
+          (total, topping) => total + topping.price,
+          0
+        ) * currentConfigurationQuantity;
+
+      setCurrentConfigurationTotal(total);
+    };
+
+    calculateTotal();
+  }, [currentConfiguration.toppings, currentConfigurationQuantity]);
+
   return (
     <div className={styles.wrapper}>
       <img
@@ -10,11 +44,19 @@ function OrderSummary() {
       />
       <div className={styles.qtyAndTotalWrapper}>
         <div className={styles.qtyWrapper}>
-          <input type="number" />
+          <input
+            type="number"
+            value={currentConfigurationQuantity}
+            onChange={handleQuantityChange}
+          />
           <span>QTY</span>
         </div>
         <div className={styles.orderTotalWrapper}>
-          <span className={styles.orderTotal}>$22.50</span>
+          <span className={styles.orderTotal}>
+            {Number.isNaN(currentConfigurationQuantity)
+              ? 0
+              : currentConfigurationTotal}
+          </span>
           <span className={styles.orderTotalText}>ORDER TOTAL</span>
         </div>
       </div>
