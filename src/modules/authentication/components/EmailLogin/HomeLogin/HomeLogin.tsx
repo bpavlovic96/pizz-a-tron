@@ -40,9 +40,9 @@ function HomeLogin() {
   useEffect(() => {
     const listenAuth = onAuthStateChanged(auth, (user) => {
       if (user) {
-        dispatch(setAuthenticatedUser(user.email));
+        dispatch(setAuthenticatedUser({ authenticatedUser: user.email }));
       } else {
-        dispatch(setAuthenticatedUser(null));
+        dispatch(setAuthenticatedUser({ authenticatedUser: null }));
       }
       console.log(authenticatedUser);
       return () => {

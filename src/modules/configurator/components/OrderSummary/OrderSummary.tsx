@@ -19,21 +19,15 @@ function OrderSummary() {
       : setcurrentConfigurationQuantity(parseInt(e.target.value, 10));
   };
 
-  console.log(currentConfigurationQuantity);
-
   useEffect(() => {
-    const calculateTotal = () => {
-      const total =
-        currentConfiguration.toppings.reduce(
-          (total, topping) => total + topping.price,
-          0
-        ) * currentConfigurationQuantity;
-
-      setCurrentConfigurationTotal(total);
-    };
-
-    calculateTotal();
-  }, [currentConfiguration.toppings, currentConfigurationQuantity]);
+    let toppingsPrice = 0;
+    currentConfiguration.toppings.map(
+      (topping) => (toppingsPrice += topping.price)
+    );
+    setCurrentConfigurationTotal(
+      currentConfiguration.size.price + toppingsPrice
+    );
+  }, [currentConfiguration.size.price, currentConfiguration.toppings]);
 
   return (
     <div className={styles.wrapper}>

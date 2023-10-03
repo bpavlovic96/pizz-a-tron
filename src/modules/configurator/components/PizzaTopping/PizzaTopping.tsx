@@ -6,15 +6,9 @@ import {
 } from "../../../storage/Slice";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../storage/Slice";
+import { Topping } from "../../../storage/Slice";
 
-type Topping = {
-  name: string;
-  emoji: string;
-  price: number;
-  key: number;
-};
-
-const PizzaTopping = ({ name, emoji, price, key }: Topping) => {
+const PizzaTopping = ({ topping, emoji, price, id }: Topping) => {
   const currentConfiguration = useSelector(
     (state: RootState) => state.storage.currentConfiguration
   );
@@ -22,11 +16,11 @@ const PizzaTopping = ({ name, emoji, price, key }: Topping) => {
   const dispatch = useDispatch();
 
   const handleHover = (hoveredPrice: number, hoveredKey: number) => {
-    dispatch(setHoveredTopping({ price: hoveredPrice, key: hoveredKey }));
+    dispatch(setHoveredTopping({ price: hoveredPrice, id: hoveredKey }));
   };
 
   const handleChooseTopping = () => {
-    const newTopping = { name, price };
+    const newTopping = { topping, price, emoji, id };
 
     dispatch(
       setCurrentConfiguration({
@@ -40,13 +34,13 @@ const PizzaTopping = ({ name, emoji, price, key }: Topping) => {
     <div className={styles.toppingsWrapper}>
       <div
         className={styles.topping}
-        onMouseEnter={() => handleHover(price, key)}
+        onMouseEnter={() => handleHover(price, id)}
         onClick={handleChooseTopping}
       >
         <div className={styles.emojiWrapper}>
           <p className={styles.toppingEmoji}>{emoji}</p>
         </div>
-        <p className={styles.toppingName}>{name}</p>
+        <p className={styles.toppingName}>{topping}</p>
       </div>
     </div>
   );

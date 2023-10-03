@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 type HoveredTopping = {
   price: number;
-  key: number | null;
+  id: number | null;
 };
 
 type FirebaseConfig = {
@@ -10,44 +10,72 @@ type FirebaseConfig = {
 };
 
 type AuthenticatedUser = {
-  authenticatedUser: string;
+  authenticatedUser: string | null;
 };
 
-type Topping = {
-  name: string;
+export type Topping = {
+  emoji: string;
+  topping: string;
+  price: number;
+  id: number;
+};
+
+type InitialSize = {
+  S: number;
+  M: number;
+  L: number;
+  [key: string]: number;
+};
+
+export type InitialConfiguration = {
+  toppings: Topping[];
+  size: InitialSize;
+  discount: number;
+  quantity: number;
+  total: number;
+};
+
+type CurrentSize = {
+  size: string;
   price: number;
 };
 
-type CurrentConfiguration = {
+export type CurrentConfiguration = {
   toppings: Topping[];
-  size: string;
-  discount: undefined | boolean;
+  size: CurrentSize;
+  discount: number;
   quantity: number;
-  total: undefined | number;
+  total: number;
 };
 
 type StorageState = {
   hoveredTopping: HoveredTopping;
   firebaseConfig: FirebaseConfig;
   authenticatedUser: AuthenticatedUser;
+  initialConfiguration: InitialConfiguration;
   currentConfiguration: CurrentConfiguration;
 };
 
 const initialState: StorageState = {
   hoveredTopping: {
     price: 0,
-    key: null,
+    id: null,
   },
   firebaseConfig: {},
-  authenticatedUser: {
-    authenticatedUser: "",
+  authenticatedUser: { authenticatedUser: null },
+  initialConfiguration: {
+    toppings: [],
+    size: { S: 0, M: 0, L: 0 },
+    discount: 0,
+    quantity: 1,
+    total: 0,
   },
   currentConfiguration: {
     toppings: [],
-    size: "",
-    discount: undefined,
+    size: { size: "", price: 0 },
+    discount: 0,
     quantity: 1,
-    total: undefined,
+    total: 0,
   },
 };
 
@@ -68,6 +96,12 @@ export const storageSlice = createSlice({
     setAuthenticatedUser: (state, action: PayloadAction<AuthenticatedUser>) => {
       state.authenticatedUser = action.payload;
     },
+    setInitialConfiguration: (
+      state,
+      action: PayloadAction<InitialConfiguration>
+    ) => {
+      state.initialConfiguration = action.payload;
+    },
     setCurrentConfiguration: (
       state,
       action: PayloadAction<CurrentConfiguration>
@@ -81,6 +115,7 @@ export const {
   setHoveredTopping,
   setFirebaseConfig,
   setAuthenticatedUser,
+  setInitialConfiguration,
   setCurrentConfiguration,
 } = storageSlice.actions;
 

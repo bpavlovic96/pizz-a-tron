@@ -2,54 +2,41 @@ import styles from "./PizzaToppings.module.css";
 import PizzaTopping from "../PizzaTopping/PizzaTopping";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../storage/Slice";
-import { useEffect, useState } from "react";
-import { ref, onValue } from "firebase/database";
-import { db } from "../../../authentication/components/FirebaseInit/FirebaseInit";
-
-type Toppings = {
-  topping: string;
-  emoji: string;
-  price: number;
-};
+import { useState, useEffect } from "react";
+import { Topping } from "../../../storage/Slice";
 
 function PizzaToppings() {
   const hoveredTopping = useSelector(
     (state: RootState) => state.storage.hoveredTopping
   );
 
-  const [toppings, setToppings] = useState<Toppings[]>([]);
+  const initialConfiguration = useSelector(
+    (state: RootState) => state.storage.initialConfiguration
+  );
+
+  const [toppings, setToppings] = useState<Topping[]>([]);
 
   useEffect(() => {
-    const fetchData = () => {
-      const off = onValue(ref(db), (snapshot) => {
-        const data = snapshot.val();
-        if (data !== null) {
-          const toppingsData = Object.values(data)[0] as Toppings[];
-          setToppings(toppingsData);
-        }
-      });
-
-      return () => {
-        off();
-      };
-    };
-
-    fetchData();
-  }, []);
+    if (initialConfiguration.toppings && initialConfiguration) {
+      setToppings(initialConfiguration.toppings);
+    }
+  }, [initialConfiguration, initialConfiguration.toppings]);
 
   return (
     <div className={styles.wrapper}>
       <h2 className={styles.header}>Toppings! Toppings!</h2>
-      <div className={styles.toppingsWrapper}>
-        {toppings.map((topping, index) => (
-          <PizzaTopping
-            name={topping.topping}
-            emoji={topping.emoji}
-            price={topping.price}
-            key={index}
-          />
-        ))}
-      </div>
+      {toppings.length > 0 && (
+        <div className={styles.toppingsWrapper}>
+          {toppings.map((topping) => (
+            <PizzaTopping
+              topping={topping.topping}
+              emoji={topping.emoji}
+              price={topping.price}
+              id={topping.id}
+            />
+          ))}
+        </div>
+      )}
 
       <span
         className={styles.toppingPrice}
