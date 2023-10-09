@@ -25,9 +25,14 @@ function OrderSummary() {
       (topping) => (toppingsPrice += topping.price)
     );
     setCurrentConfigurationTotal(
-      currentConfiguration.size.price + toppingsPrice
+      (currentConfiguration.size.price + toppingsPrice) *
+        currentConfigurationQuantity
     );
-  }, [currentConfiguration.size.price, currentConfiguration.toppings]);
+  }, [
+    currentConfiguration.size.price,
+    currentConfiguration.toppings,
+    currentConfigurationQuantity,
+  ]);
 
   return (
     <div className={styles.wrapper}>

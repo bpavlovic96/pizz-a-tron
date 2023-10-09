@@ -40,29 +40,22 @@ function HomeLogin() {
   useEffect(() => {
     const listenAuth = onAuthStateChanged(auth, (user) => {
       if (user) {
-        dispatch(setAuthenticatedUser({ authenticatedUser: user.email }));
+        dispatch(setAuthenticatedUser(user.email));
       } else {
-        dispatch(setAuthenticatedUser({ authenticatedUser: null }));
+        dispatch(setAuthenticatedUser(null));
       }
-      console.log(authenticatedUser);
       return () => {
         listenAuth();
       };
     });
-  }, [authenticatedUser, dispatch]);
+  }, [dispatch]);
 
   const userSignOut = () => {
-    authenticatedUser !== null
-      ? signOut(auth)
-          .then(() => {
-            setLoggedIn("");
-          })
-          .catch((error) => console.log(error))
-      : signOut(auth)
-          .then(() => {})
-          .catch((error) => {
-            console.log(error);
-          });
+    signOut(auth)
+      .then(() => {
+        setLoggedIn("");
+      })
+      .catch((error) => console.log(error));
   };
 
   const openLoginModal = () => {

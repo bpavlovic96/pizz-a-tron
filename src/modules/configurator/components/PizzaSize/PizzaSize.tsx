@@ -2,6 +2,7 @@ import styles from "./PizzaSize.module.css";
 import { useSelector } from "react-redux";
 import { RootState, setCurrentConfiguration } from "../../../storage/Slice";
 import { useDispatch } from "react-redux";
+import { useCallback } from "react";
 
 function PizzaSize() {
   const currentConfiguration = useSelector(
@@ -14,16 +15,17 @@ function PizzaSize() {
 
   const dispatch = useDispatch();
 
-  const handlePizzaSize = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const value = (e.target as HTMLButtonElement).value;
-    const updatedConfiguration = {
-      ...currentConfiguration,
-      size: { size: value, price: initialConfiguration.size[value] || 0 },
-    };
-    dispatch(setCurrentConfiguration(updatedConfiguration));
-  };
-
-  console.log(currentConfiguration);
+  const handlePizzaSize = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement>) => {
+      const value = (e.target as HTMLButtonElement).value;
+      const updatedConfiguration = {
+        ...currentConfiguration,
+        size: { size: value, price: initialConfiguration.size[value] || 0 },
+      };
+      dispatch(setCurrentConfiguration(updatedConfiguration));
+    },
+    [currentConfiguration, dispatch, initialConfiguration.size]
+  );
 
   return (
     <div className={styles.sizeWrapper}>

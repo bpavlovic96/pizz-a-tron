@@ -9,16 +9,14 @@ type FirebaseConfig = {
   [key: string]: string;
 };
 
-type AuthenticatedUser = {
-  authenticatedUser: string | null;
-};
-
 export type Topping = {
   emoji: string;
   topping: string;
   price: number;
   id: number;
 };
+
+type AuthenticatedUser = string | null;
 
 type InitialSize = {
   S: number;
@@ -62,7 +60,7 @@ const initialState: StorageState = {
     id: null,
   },
   firebaseConfig: {},
-  authenticatedUser: { authenticatedUser: null },
+  authenticatedUser: null,
   initialConfiguration: {
     toppings: [],
     size: { S: 0, M: 0, L: 0 },
