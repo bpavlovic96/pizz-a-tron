@@ -26,13 +26,10 @@ function OrderSummary() {
     );
     setCurrentConfigurationTotal(
       (currentConfiguration.size.price + toppingsPrice) *
-        currentConfigurationQuantity
+        currentConfigurationQuantity *
+        (1 - currentConfiguration.discount)
     );
-  }, [
-    currentConfiguration.size.price,
-    currentConfiguration.toppings,
-    currentConfigurationQuantity,
-  ]);
+  }, [currentConfiguration, currentConfigurationQuantity]);
 
   return (
     <div className={styles.wrapper}>
@@ -54,7 +51,7 @@ function OrderSummary() {
           <span className={styles.orderTotal}>
             {Number.isNaN(currentConfigurationQuantity)
               ? 0
-              : currentConfigurationTotal}
+              : currentConfigurationTotal.toFixed(2)}
           </span>
           <span className={styles.orderTotalText}>ORDER TOTAL</span>
         </div>

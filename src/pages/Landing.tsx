@@ -17,10 +17,7 @@ function Landing() {
 
   useEffect(() => {
     if (authenticatedUser) {
-      const timeoutId = setTimeout(() => {
-        setConfiguratorPopup(true);
-      }, 2000);
-      return () => clearTimeout(timeoutId);
+      setConfiguratorPopup(true);
     } else {
       setConfiguratorPopup(false);
     }
@@ -29,10 +26,14 @@ function Landing() {
   return (
     <div className={styles.wrapper}>
       <Navbar />
-      {configuratorPopup && <PizzaToppings />}
-      <PizzaSize />
-      <Discount />
-      <OrderSummary />
+      {configuratorPopup && (
+        <>
+          <PizzaToppings />
+          <PizzaSize />
+          <Discount />
+          <OrderSummary />
+        </>
+      )}
     </div>
   );
 }

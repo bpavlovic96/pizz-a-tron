@@ -38,9 +38,18 @@ function PizzaToppings() {
         </div>
       )}
 
-      <span
-        className={styles.toppingPrice}
-      >{`Total price +$${hoveredTopping.price}`}</span>
+      <div
+        className={
+          hoveredTopping.price === 0
+            ? `${styles.toppingPriceContainer} ${styles.toppingPriceContainerEmpty}`
+            : styles.toppingPriceContainer
+        }
+      >
+        <span>Topping price: </span>
+        <span className={styles.toppingPrice}>
+          {hoveredTopping.price !== 0 ? `$${hoveredTopping.price}` : "$0"}
+        </span>
+      </div>
     </div>
   );
 }

@@ -25,10 +25,14 @@ type InitialSize = {
   [key: string]: number;
 };
 
+type Discount = {
+  [key: string]: number;
+};
+
 export type InitialConfiguration = {
   toppings: Topping[];
   size: InitialSize;
-  discount: number;
+  discount: Discount;
   quantity: number;
   total: number;
 };
@@ -64,7 +68,7 @@ const initialState: StorageState = {
   initialConfiguration: {
     toppings: [],
     size: { S: 0, M: 0, L: 0 },
-    discount: 0,
+    discount: {},
     quantity: 1,
     total: 0,
   },

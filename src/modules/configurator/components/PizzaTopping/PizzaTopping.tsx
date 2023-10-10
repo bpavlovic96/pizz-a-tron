@@ -19,22 +19,52 @@ const PizzaTopping = ({ topping, emoji, price, id }: Topping) => {
     dispatch(setHoveredTopping({ price: hoveredPrice, id: hoveredKey }));
   };
 
-  const handleChooseTopping = () => {
-    const newTopping = { topping, price, emoji, id };
-
-    dispatch(
-      setCurrentConfiguration({
-        ...currentConfiguration,
-        toppings: [...currentConfiguration.toppings, newTopping],
-      })
-    );
+  const handleHoverLeave = () => {
+    dispatch(setHoveredTopping({ price: 0, id: null }));
   };
 
+  const handleChooseTopping = () => {
+    const isToppingSelected = currentConfiguration.toppings.some(
+      (topping) => topping.id === id
+    );
+
+    if (isToppingSelected === false) {
+      const newTopping = { topping, price, emoji, id };
+
+      dispatch(
+        setCurrentConfiguration({
+          ...currentConfiguration,
+          toppings: [...currentConfiguration.toppings, newTopping],
+        })
+      );
+    } else {
+      const updatedToppings = currentConfiguration.toppings.filter(
+        (topping) => topping.id !== id
+      );
+
+      dispatch(
+        setCurrentConfiguration({
+          ...currentConfiguration,
+          toppings: updatedToppings,
+        })
+      );
+    }
+  };
+
+  const isSelected = currentConfiguration.toppings.some(
+    (selectedTopping) => selectedTopping.id === id
+  );
+
   return (
-    <div className={styles.toppingsWrapper}>
+    <div
+      className={`${styles.toppingsWrapper} ${
+        isSelected ? styles.selectedTopping : null
+      }`}
+    >
       <div
         className={styles.topping}
         onMouseEnter={() => handleHover(price, id)}
+        onMouseLeave={handleHoverLeave}
         onClick={handleChooseTopping}
       >
         <div className={styles.emojiWrapper}>
