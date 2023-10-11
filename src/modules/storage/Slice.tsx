@@ -48,6 +48,12 @@ export type CurrentConfiguration = {
   discount: number;
   quantity: number;
   total: number;
+  ready: boolean;
+};
+
+type DiscountDetails = {
+  isDiscountApplied: boolean;
+  discountWord: string;
 };
 
 type StorageState = {
@@ -56,6 +62,7 @@ type StorageState = {
   authenticatedUser: AuthenticatedUser;
   initialConfiguration: InitialConfiguration;
   currentConfiguration: CurrentConfiguration;
+  discountDetails: DiscountDetails;
 };
 
 const initialState: StorageState = {
@@ -78,6 +85,11 @@ const initialState: StorageState = {
     discount: 0,
     quantity: 1,
     total: 0,
+    ready: false,
+  },
+  discountDetails: {
+    isDiscountApplied: false,
+    discountWord: "",
   },
 };
 
@@ -110,6 +122,9 @@ export const storageSlice = createSlice({
     ) => {
       state.currentConfiguration = action.payload;
     },
+    setDiscountDetails: (state, action: PayloadAction<DiscountDetails>) => {
+      state.discountDetails = action.payload;
+    },
   },
 });
 
@@ -119,6 +134,7 @@ export const {
   setAuthenticatedUser,
   setInitialConfiguration,
   setCurrentConfiguration,
+  setDiscountDetails,
 } = storageSlice.actions;
 
 export default storageSlice.reducer;

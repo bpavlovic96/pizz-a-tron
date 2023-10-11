@@ -1,0 +1,22 @@
+.buttonWrapper {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  border-radius: 72px;
+  background: var(--background-light, #ececf3);
+  width: 438px;
+  height: 88px;
+  align-items: center;
+  justify-content: center;
+}
+
+.input {
+  color: var(--text-colors-text-light, #8c8c8c);
+  font-feature-settings: "clig" off, "liga" off;
+  font-family: Avenir;
+  font-size: 1.2rem;
+  line-height: 140%;
+  border: none;
+  background-color: transparent;
+  margin-left: 40px;
+  outline: none;
+}

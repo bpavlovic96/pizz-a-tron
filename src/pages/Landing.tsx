@@ -7,12 +7,17 @@ import { useState, useEffect } from "react";
 import PizzaSize from "../modules/configurator/components/PizzaSize/PizzaSize";
 import Discount from "../modules/configurator/components/Discount/Discount";
 import OrderSummary from "../modules/configurator/components/OrderSummary/OrderSummary";
+import Order from "../modules/order/Order";
 
 function Landing() {
   const [configuratorPopup, setConfiguratorPopup] = useState(false);
 
   const authenticatedUser = useSelector(
     (state: RootState) => state.storage.authenticatedUser
+  );
+
+  const configuratorReady = useSelector(
+    (state: RootState) => state.storage.currentConfiguration
   );
 
   useEffect(() => {
@@ -26,14 +31,18 @@ function Landing() {
   return (
     <div className={styles.wrapper}>
       <Navbar />
-      {configuratorPopup && (
-        <>
-          <PizzaToppings />
-          <PizzaSize />
-          <Discount />
-          <OrderSummary />
-        </>
-      )}
+      <div className={styles.configuratorWrapper}>
+        {configuratorPopup && !configuratorReady.ready ? (
+          <>
+            <PizzaToppings />
+            <PizzaSize />
+            <Discount />
+            <OrderSummary />
+          </>
+        ) : (
+          configuratorPopup && configuratorReady.ready && <Order />
+        )}
+      </div>
     </div>
   );
 }

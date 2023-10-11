@@ -2,3 +2,9 @@
   width: 53.75%;
   margin: 0 auto;
 }
+
+.configuratorWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
