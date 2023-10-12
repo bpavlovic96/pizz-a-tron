@@ -13,10 +13,11 @@
   display: flex;
   border-radius: 72px;
   background: var(--background-light, #ececf3);
-  width: 438px;
+  width: 452px;
   height: 88px;
   align-items: center;
   justify-content: center;
+  gap: 1rem;
 }
 
 .buttonWrapper button {
@@ -27,13 +28,17 @@
   padding: 0px 24px;
   justify-content: center;
   align-items: center;
-  gap: 16px;
   border-radius: 36px;
   border: none;
   background-color: transparent;
 }
 
 .buttonWrapper button:hover {
+  background: var(--colors-white, #fff);
+  box-shadow: 0px 8px 20px 0px rgba(0, 0, 0, 0.1);
+}
+
+.buttonWrapper .button {
   background: var(--colors-white, #fff);
   box-shadow: 0px 8px 20px 0px rgba(0, 0, 0, 0.1);
 }

@@ -17,11 +17,13 @@ function Database() {
       const initialConfigurationData = { toppings, size, discount };
       const initialConfigurationDataDb = ref(db, "initialConfigurationData");
       set(initialConfigurationDataDb, initialConfigurationData);
-
-      const currentConfigurationDataDb = ref(db, "currentConfigurationData");
-      set(currentConfigurationDataDb, currentConfiguration);
     }
     writeToDatabase();
+  }, []);
+
+  useEffect(() => {
+    const currentConfigurationDataDb = ref(db, "currentConfigurationData");
+    set(currentConfigurationDataDb, currentConfiguration);
   }, [currentConfiguration]);
 
   return <></>;

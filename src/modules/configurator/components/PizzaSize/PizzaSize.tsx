@@ -17,7 +17,7 @@ function PizzaSize() {
 
   const handlePizzaSize = useCallback(
     (e: React.MouseEvent<HTMLButtonElement>) => {
-      const value = (e.target as HTMLButtonElement).value;
+      const value = (e.target as HTMLButtonElement).innerText;
       const updatedConfiguration = {
         ...currentConfiguration,
         size: { size: value, price: initialConfiguration.size[value] || 0 },
@@ -31,15 +31,16 @@ function PizzaSize() {
     <div className={styles.sizeWrapper}>
       <h2 className={styles.sizeHeader}>Pizza! Pizza! size</h2>
       <div className={styles.buttonWrapper}>
-        <button value="S" onClick={handlePizzaSize}>
-          S
-        </button>
-        <button value="M" onClick={handlePizzaSize}>
-          M
-        </button>
-        <button value="L" onClick={handlePizzaSize}>
-          L
-        </button>
+        {["S", "M", "L"].map((letter) => (
+          <button
+            onClick={handlePizzaSize}
+            className={
+              letter === currentConfiguration.size.size ? styles.button : ""
+            }
+          >
+            {letter}
+          </button>
+        ))}
       </div>
     </div>
   );

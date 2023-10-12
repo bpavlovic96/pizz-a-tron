@@ -16,10 +16,15 @@ function OrderSummary() {
   const [currentConfigurationTotal, setCurrentConfigurationTotal] = useState(0);
 
   const handleQuantityChange = (e: ChangeEvent<HTMLInputElement>) => {
-    currentConfigurationQuantity <= 0 &&
-    Number.isNaN(currentConfigurationQuantity)
-      ? setCurrentConfigurationQuantity(1)
-      : setCurrentConfigurationQuantity(parseInt(e.target.value, 10));
+    const parsedValue = parseInt(e.target.value, 10);
+    setCurrentConfigurationQuantity(parsedValue);
+
+    dispatch(
+      setCurrentConfiguration({
+        ...currentConfiguration,
+        quantity: Number.isNaN(parsedValue) ? 1 : parsedValue,
+      })
+    );
   };
 
   useEffect(() => {
@@ -32,18 +37,34 @@ function OrderSummary() {
         currentConfigurationQuantity *
         (1 - currentConfiguration.discount)
     );
-  }, [currentConfiguration, currentConfigurationQuantity]);
+  }, [
+    currentConfiguration,
+    currentConfigurationQuantity,
+    currentConfigurationTotal,
+  ]);
 
-  const handleConfigurationReady = () => {
+  useEffect(() => {
     dispatch(
       setCurrentConfiguration({
         ...currentConfiguration,
-        ready: true,
-        total: currentConfigurationTotal,
-        quantity: currentConfigurationQuantity,
+        total: Number.isNaN(currentConfigurationTotal)
+          ? 1
+          : currentConfigurationTotal,
       })
     );
+  }, [currentConfigurationTotal]);
+
+  const handleConfigurationReady = () => {
+    currentConfiguration.size.size !== "" &&
+      dispatch(
+        setCurrentConfiguration({
+          ...currentConfiguration,
+          ready: true,
+        })
+      );
   };
+
+  console.log(currentConfigurationQuantity);
 
   return (
     <div className={styles.wrapper}>

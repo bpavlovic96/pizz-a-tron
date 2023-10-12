@@ -36,11 +36,12 @@
 
 .deliveryNote {
   color: var(--text-colors-text-light, #8c8c8c);
+  line-height: 2;
 }
 
 .discountButtonContainer {
   margin-top: 2.5rem;
-  margin-bottom: 5rem;
+  margin-bottom: 2.5rem;
 }
 
 .priceWrapper {
@@ -79,7 +80,7 @@
 }
 
 .shippingInformation {
-  width: 50%;
+  width: 30%;
 }
 
 .inputFieldWrapper div:nth-child(1) {
@@ -109,8 +110,16 @@
     "first first"
     "second third"
     "fourth fourth";
+  margin-bottom: 1.5rem;
+  gap: 1rem;
 }
 
 .orderDetails {
-  width: 50%;
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+}
+
+.paymentDetailsWrapper {
+  margin-bottom: 2.5rem;
 }

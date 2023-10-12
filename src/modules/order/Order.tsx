@@ -60,8 +60,10 @@ function Order() {
             <InputField placeholder="Postal Code" />
             <InputField placeholder="County" />
           </div>
-          <h3 className={styles.subHeader}>Payment details</h3>
-          <span>Cash on delivery</span>
+          <div className={styles.paymentDetailsWrapper}>
+            <h3 className={styles.subHeader}>Payment details</h3>
+            <span>Cash on delivery</span>
+          </div>
           <button className={styles.finishButton}>Finish Order</button>
         </div>
       </div>
