@@ -8,9 +8,7 @@ import { useSelector } from "react-redux";
 const GoogleLogin: React.FC<GoogleModalProps> = ({ closeLoginModal }) => {
   const [googleLoginStatus, setGoogleLoginStatus] = useState("");
 
-  const authenticatedUser = useSelector(
-    (state: RootState) => state.storage.authenticatedUser
-  );
+  const authenticatedUser = useSelector((state: RootState) => state.storage.authenticatedUser);
 
   const provider = new GoogleAuthProvider();
   const auth = getAuth();
@@ -29,7 +27,7 @@ const GoogleLogin: React.FC<GoogleModalProps> = ({ closeLoginModal }) => {
 
   return (
     <>
-      {authenticatedUser === null ? (
+      {authenticatedUser.userEmail || authenticatedUser.userId === null ? (
         <button className={styles.button} onClick={handleGoogleLogin}>
           Log in with Google?
         </button>
@@ -37,9 +35,7 @@ const GoogleLogin: React.FC<GoogleModalProps> = ({ closeLoginModal }) => {
 
       <p
         className={`${styles.loginButton} ${
-          googleLoginStatus === "Login successful."
-            ? styles.success
-            : styles.failure
+          googleLoginStatus === "Login successful." ? styles.success : styles.failure
         }`}
       >
         {googleLoginStatus}

@@ -18,12 +18,8 @@ function Landing() {
   const currentConfiguration = useSelector((state: RootState) => state.storage.currentConfiguration);
 
   useEffect(() => {
-    if (authenticatedUser) {
-      setConfiguratorPopup(true);
-    } else {
-      setConfiguratorPopup(false);
-    }
-  }, [authenticatedUser]);
+    authenticatedUser.userEmail ? setConfiguratorPopup(true) : setConfiguratorPopup(false);
+  }, [authenticatedUser.userEmail]);
 
   return (
     <div className={styles.wrapper}>

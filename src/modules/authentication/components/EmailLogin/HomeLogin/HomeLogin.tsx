@@ -2,11 +2,12 @@ import styles from "./HomeLogin.module.css";
 import { useEffect, useState } from "react";
 import LoginModal from "../LoginModal/LoginModal";
 import { useSelector } from "react-redux";
-import { RootState, setAuthenticatedUser } from "../../../../storage/Slice";
+import { RootState, setAuthenticatedUser, setCurrentConfiguration } from "../../../../storage/Slice";
 import SignupModal from "../SignupModal/SignupModal";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { useDispatch } from "react-redux";
 import { auth } from "../../FirebaseInit/FirebaseInit";
+import { v4 as uuidv4 } from "uuid";
 
 export type LoginModalProps = {
   isLoginOpen: boolean;
@@ -33,16 +34,15 @@ function HomeLogin() {
   const [isSignupOpen, setIsSignupOpen] = useState(false);
 
   const dispatch = useDispatch();
-  const authenticatedUser = useSelector(
-    (state: RootState) => state.storage.authenticatedUser
-  );
+  const authenticatedUser = useSelector((state: RootState) => state.storage.authenticatedUser);
+  const currentConfiguration = useSelector((state: RootState) => state.storage.currentConfiguration);
 
   useEffect(() => {
     const listenAuth = onAuthStateChanged(auth, (user) => {
       if (user) {
-        dispatch(setAuthenticatedUser(user.email));
+        dispatch(setAuthenticatedUser({ ...authenticatedUser, userEmail: user.email, userId: user.uid }));
       } else {
-        dispatch(setAuthenticatedUser(null));
+        dispatch(setAuthenticatedUser({ ...authenticatedUser, userEmail: null, userId: null }));
       }
       return () => {
         listenAuth();
@@ -74,15 +74,23 @@ function HomeLogin() {
     setIsSignupOpen(false);
   };
 
+  useEffect(() => {
+    const newId = uuidv4();
+
+    authenticatedUser.userEmail && currentConfiguration.id === ""
+      ? dispatch(setCurrentConfiguration({ ...currentConfiguration, id: newId }))
+      : dispatch(setCurrentConfiguration({ ...currentConfiguration, id: "" }));
+  }, [authenticatedUser.userEmail]);
+
   return (
     <>
-      {authenticatedUser === null ? (
-        <button className={styles.button} onClick={openLoginModal}>
-          Log in
-        </button>
-      ) : (
+      {authenticatedUser.userEmail && authenticatedUser.userId ? (
         <button className={styles.button} onClick={userSignOut}>
           Log out
+        </button>
+      ) : (
+        <button className={styles.button} onClick={openLoginModal}>
+          Log in
         </button>
       )}
 
@@ -96,11 +104,7 @@ function HomeLogin() {
         />
       ) : null}
       {isSignupOpen ? (
-        <SignupModal
-          closeSignupModal={closeSignupModal}
-          isSignupOpen={isSignupOpen}
-          openLoginModal={openLoginModal}
-        />
+        <SignupModal closeSignupModal={closeSignupModal} isSignupOpen={isSignupOpen} openLoginModal={openLoginModal} />
       ) : null}
     </>
   );

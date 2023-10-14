@@ -16,7 +16,21 @@ export type Topping = {
   id: number;
 };
 
-type AuthenticatedUser = string | null;
+export type OrderHistory = {
+  id: string;
+  toppings: Topping[];
+  size: CurrentSize;
+  discount: number;
+  quantity: number;
+  total: number;
+  shippingInformation: ShippingInformation;
+};
+
+type AuthenticatedUser = {
+  userEmail: string | null;
+  userId: string | null;
+  orderHistory: OrderHistory[];
+};
 
 type InitialSize = {
   S: number;
@@ -50,6 +64,7 @@ type ShippingInformation = {
 };
 
 export type CurrentConfiguration = {
+  id: string;
   toppings: Topping[];
   size: CurrentSize;
   discount: number;
@@ -80,7 +95,7 @@ const initialState: StorageState = {
     id: null,
   },
   firebaseConfig: {},
-  authenticatedUser: null,
+  authenticatedUser: { userEmail: null, userId: null, orderHistory: [] },
   initialConfiguration: {
     toppings: [],
     size: { S: 0, M: 0, L: 0 },
@@ -89,6 +104,7 @@ const initialState: StorageState = {
     total: 0,
   },
   currentConfiguration: {
+    id: "",
     toppings: [],
     size: { size: "", price: 0 },
     discount: 0,

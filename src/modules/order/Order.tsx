@@ -1,17 +1,20 @@
 import { useDispatch, useSelector } from "react-redux";
-import { RootState, setCurrentConfiguration } from "../storage/Slice";
+import { RootState, setCurrentConfiguration, OrderHistory } from "../storage/Slice";
 import { useState, useEffect } from "react";
 import DiscountButton from "../configurator/components/Discount/DiscountButton/DiscountButton";
 import styles from "./Order.module.css";
 import InputField from "./components/InputField/InputField";
+import { ref, push } from "firebase/database";
+import { db } from "../authentication/components/FirebaseInit/FirebaseInit";
 
 function Order() {
   const currentConfiguration = useSelector((state: RootState) => state.storage.currentConfiguration);
+  const authenticatedUser = useSelector((state: RootState) => state.storage.authenticatedUser);
 
   const dispatch = useDispatch();
 
   const [toppingsList, setToppingsList] = useState<string[]>([]);
-  const [shippingInformation, setShippingInformation] = useState({
+  const [shippingInfo, setShippingInfo] = useState({
     street: "",
     city: "",
     postalCode: "",
@@ -25,21 +28,55 @@ function Order() {
   }, [currentConfiguration.toppings]);
 
   const handleInputChange = (field: string, value: string) => {
-    setShippingInformation((prevInfo) => ({
+    setShippingInfo((prevInfo) => ({
       ...prevInfo,
       [field]: value,
     }));
   };
 
-  const handleShippingInformation = () => {
-    dispatch(
-      setCurrentConfiguration({
-        ...currentConfiguration,
-        shippingInformation: { ...shippingInformation },
-        finished: true,
-      })
-    );
+  const updateConfiguration = () => {
+    const updatedConfiguration = {
+      ...currentConfiguration,
+      shippingInformation: {
+        ...currentConfiguration.shippingInformation,
+        ...shippingInfo,
+      },
+      finished: true,
+    };
+
+    if (shippingInfo !== undefined) {
+      dispatch(setCurrentConfiguration(updatedConfiguration));
+    }
+
+    return updatedConfiguration;
   };
+
+  const prepareOrderForHistory = (updatedConfiguration: OrderHistory) => {
+    const newOrder = {
+      id: updatedConfiguration.id,
+      toppings: updatedConfiguration.toppings,
+      size: updatedConfiguration.size,
+      discount: updatedConfiguration.discount,
+      quantity: updatedConfiguration.quantity,
+      total: updatedConfiguration.total,
+      shippingInformation: updatedConfiguration.shippingInformation,
+    };
+
+    return newOrder;
+  };
+
+  const addOrderToHistory = () => {
+    const updatedConfiguration = updateConfiguration();
+
+    const updatedOrderHistory = prepareOrderForHistory(updatedConfiguration);
+
+    if (authenticatedUser.userId) {
+      const userOrderRef = ref(db, `users/${authenticatedUser.userId}/orders`);
+      push(userOrderRef, updatedOrderHistory);
+    }
+  };
+
+  console.log(currentConfiguration, authenticatedUser);
 
   return (
     <div className={styles.orderScreenWrapper}>
@@ -72,22 +109,22 @@ function Order() {
           <div className={styles.inputFieldWrapper}>
             <InputField
               placeholder="Street name and number"
-              value={shippingInformation.street}
+              value={shippingInfo.street}
               onChange={(e) => handleInputChange("street", e.target.value)}
             />
             <InputField
               placeholder="City"
-              value={shippingInformation.city}
+              value={shippingInfo.city}
               onChange={(e) => handleInputChange("city", e.target.value)}
             />
             <InputField
               placeholder="Postal Code"
-              value={shippingInformation.postalCode}
+              value={shippingInfo.postalCode}
               onChange={(e) => handleInputChange("postalCode", e.target.value)}
             />
             <InputField
               placeholder="County"
-              value={shippingInformation.county}
+              value={shippingInfo.county}
               onChange={(e) => handleInputChange("county", e.target.value)}
             />
           </div>
@@ -95,7 +132,7 @@ function Order() {
             <h3 className={styles.subHeader}>Payment details</h3>
             <span>Cash on delivery</span>
           </div>
-          <button className={styles.finishButton} onClick={handleShippingInformation}>
+          <button className={styles.finishButton} onClick={addOrderToHistory}>
             Finish Order
           </button>
         </div>
