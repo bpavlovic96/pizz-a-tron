@@ -5,13 +5,9 @@ import { useDispatch } from "react-redux";
 import { useCallback } from "react";
 
 function PizzaSize() {
-  const currentConfiguration = useSelector(
-    (state: RootState) => state.storage.currentConfiguration
-  );
+  const currentConfiguration = useSelector((state: RootState) => state.storage.currentConfiguration);
 
-  const initialConfiguration = useSelector(
-    (state: RootState) => state.storage.initialConfiguration
-  );
+  const initialConfiguration = useSelector((state: RootState) => state.storage.initialConfiguration);
 
   const dispatch = useDispatch();
 
@@ -31,12 +27,11 @@ function PizzaSize() {
     <div className={styles.sizeWrapper}>
       <h2 className={styles.sizeHeader}>Pizza! Pizza! size</h2>
       <div className={styles.buttonWrapper}>
-        {["S", "M", "L"].map((letter) => (
+        {["S", "M", "L"].map((letter, index) => (
           <button
             onClick={handlePizzaSize}
-            className={
-              letter === currentConfiguration.size.size ? styles.button : ""
-            }
+            key={index}
+            className={letter === currentConfiguration.size.size ? styles.button : ""}
           >
             {letter}
           </button>

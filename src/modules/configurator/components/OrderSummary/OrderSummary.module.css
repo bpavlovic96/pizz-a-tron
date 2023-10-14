@@ -77,4 +77,17 @@
   font-size: 1rem;
   margin-left: 3rem;
   cursor: pointer;
+  position: relative;
+}
+
+.quantityError {
+  position: absolute;
+  bottom: 0rem;
+  left: 15rem;
+  text-align: left;
+  color: var(--border-border-color, #ff0000);
+  font-size: 1rem;
+  font-style: italic;
+
+  font-weight: 500;
 }

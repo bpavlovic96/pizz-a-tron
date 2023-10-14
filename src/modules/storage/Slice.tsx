@@ -42,6 +42,13 @@ type CurrentSize = {
   price: number;
 };
 
+type ShippingInformation = {
+  street: string;
+  city: string;
+  postalCode: string;
+  county: string;
+};
+
 export type CurrentConfiguration = {
   toppings: Topping[];
   size: CurrentSize;
@@ -49,6 +56,8 @@ export type CurrentConfiguration = {
   quantity: number;
   total: number;
   ready: boolean;
+  shippingInformation: ShippingInformation;
+  finished: boolean;
 };
 
 type DiscountDetails = {
@@ -86,6 +95,8 @@ const initialState: StorageState = {
     quantity: 1,
     total: 0,
     ready: false,
+    shippingInformation: { street: "", city: "", postalCode: "", county: "" },
+    finished: false,
   },
   discountDetails: {
     isDiscountApplied: false,
@@ -110,16 +121,10 @@ export const storageSlice = createSlice({
     setAuthenticatedUser: (state, action: PayloadAction<AuthenticatedUser>) => {
       state.authenticatedUser = action.payload;
     },
-    setInitialConfiguration: (
-      state,
-      action: PayloadAction<InitialConfiguration>
-    ) => {
+    setInitialConfiguration: (state, action: PayloadAction<InitialConfiguration>) => {
       state.initialConfiguration = action.payload;
     },
-    setCurrentConfiguration: (
-      state,
-      action: PayloadAction<CurrentConfiguration>
-    ) => {
+    setCurrentConfiguration: (state, action: PayloadAction<CurrentConfiguration>) => {
       state.currentConfiguration = action.payload;
     },
     setDiscountDetails: (state, action: PayloadAction<DiscountDetails>) => {

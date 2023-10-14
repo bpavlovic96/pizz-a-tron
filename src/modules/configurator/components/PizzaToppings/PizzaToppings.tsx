@@ -6,13 +6,9 @@ import { useState, useEffect } from "react";
 import { Topping } from "../../../storage/Slice";
 
 function PizzaToppings() {
-  const hoveredTopping = useSelector(
-    (state: RootState) => state.storage.hoveredTopping
-  );
+  const hoveredTopping = useSelector((state: RootState) => state.storage.hoveredTopping);
 
-  const initialConfiguration = useSelector(
-    (state: RootState) => state.storage.initialConfiguration
-  );
+  const initialConfiguration = useSelector((state: RootState) => state.storage.initialConfiguration);
 
   const [toppings, setToppings] = useState<Topping[]>([]);
 
@@ -27,12 +23,13 @@ function PizzaToppings() {
       <h2 className={styles.header}>Toppings! Toppings!</h2>
       {toppings.length > 0 && (
         <div className={styles.toppingsWrapper}>
-          {toppings.map((topping) => (
+          {toppings.map((topping, index) => (
             <PizzaTopping
               topping={topping.topping}
               emoji={topping.emoji}
               price={topping.price}
               id={topping.id}
+              key={index}
             />
           ))}
         </div>
@@ -46,9 +43,7 @@ function PizzaToppings() {
         }
       >
         <span>Topping price: </span>
-        <span className={styles.toppingPrice}>
-          {hoveredTopping.price !== 0 ? `$${hoveredTopping.price}` : "$0"}
-        </span>
+        <span className={styles.toppingPrice}>{hoveredTopping.price !== 0 ? `$${hoveredTopping.price}` : "$0"}</span>
       </div>
     </div>
   );

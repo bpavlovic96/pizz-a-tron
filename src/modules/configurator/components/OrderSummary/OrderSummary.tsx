@@ -1,98 +1,95 @@
 import styles from "./OrderSummary.module.css";
+import pizzaSlice from "../../../../assets/pizzaSlice.png";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../storage/Slice";
-import { useState, useEffect, ChangeEvent } from "react";
+import { useEffect, ChangeEvent, useState } from "react";
 import { setCurrentConfiguration } from "../../../storage/Slice";
 
 function OrderSummary() {
-  const currentConfiguration = useSelector(
-    (state: RootState) => state.storage.currentConfiguration
-  );
+  const currentConfiguration = useSelector((state: RootState) => state.storage.currentConfiguration);
 
   const dispatch = useDispatch();
 
-  const [currentConfigurationQuantity, setCurrentConfigurationQuantity] =
-    useState(1);
-  const [currentConfigurationTotal, setCurrentConfigurationTotal] = useState(0);
+  const [pizzaQuantity, setPizzaQuantity] = useState(1);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleQuantityChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const parsedValue = parseInt(e.target.value, 10);
-    setCurrentConfigurationQuantity(parsedValue);
-
-    dispatch(
-      setCurrentConfiguration({
-        ...currentConfiguration,
-        quantity: Number.isNaN(parsedValue) ? 1 : parsedValue,
-      })
-    );
+    setPizzaQuantity(parseInt(e.target.value, 10));
   };
 
   useEffect(() => {
-    let toppingsPrice = 0;
-    currentConfiguration.toppings.map(
-      (topping) => (toppingsPrice += topping.price)
-    );
-    setCurrentConfigurationTotal(
-      (currentConfiguration.size.price + toppingsPrice) *
-        currentConfigurationQuantity *
-        (1 - currentConfiguration.discount)
-    );
-  }, [
-    currentConfiguration,
-    currentConfigurationQuantity,
-    currentConfigurationTotal,
-  ]);
-
-  useEffect(() => {
     dispatch(
       setCurrentConfiguration({
         ...currentConfiguration,
-        total: Number.isNaN(currentConfigurationTotal)
-          ? 1
-          : currentConfigurationTotal,
+        quantity: !isNaN(pizzaQuantity) && pizzaQuantity >= 1 ? pizzaQuantity : 0,
       })
     );
-  }, [currentConfigurationTotal]);
+  }, [currentConfiguration.quantity, pizzaQuantity, dispatch]);
+
+  useEffect(() => {
+    let toppingsPrice = 0;
+    currentConfiguration.toppings.map((topping) => (toppingsPrice += topping.price));
+
+    const totalPrice =
+      (currentConfiguration.size.price + toppingsPrice) *
+      currentConfiguration.quantity *
+      (1 - currentConfiguration.discount);
+
+    if (totalPrice !== currentConfiguration.total) {
+      dispatch(
+        setCurrentConfiguration({
+          ...currentConfiguration,
+          total: Number.isNaN(totalPrice) ? 0 : totalPrice,
+        })
+      );
+    }
+  }, [currentConfiguration, dispatch]);
 
   const handleConfigurationReady = () => {
-    currentConfiguration.size.size !== "" &&
+    if (currentConfiguration.size.size === "" && isNaN(currentConfiguration.quantity)) {
+      setErrorMessage(`Please select a Pizza size and quantity.`);
+    } else if (currentConfiguration.size.size === "" && currentConfiguration.quantity <= 0) {
+      setErrorMessage(`Please select a Pizza size.\nQuantity of pizzas cannot be 0, please select at least 1 pizza.`);
+    } else if (currentConfiguration.size.size === "" && currentConfiguration.quantity > 10) {
+      setErrorMessage(`Please select a Pizza size.\nMaximum quantity of 10 pizzas, please change the quantity.`);
+    } else if (currentConfiguration.size.size === "") {
+      setErrorMessage("Please select a size.");
+    } else if (isNaN(currentConfiguration.quantity)) {
+      setErrorMessage("Please select a quantity.");
+    } else if (currentConfiguration.quantity <= 0) {
+      setErrorMessage(`Quantity of pizzas cannot be 0, please select at least 1 pizza.`);
+    } else if (currentConfiguration.quantity > 10) {
+      setErrorMessage(`Maximum quantity of 10 pizzas, please change the quantity.`);
+    } else {
       dispatch(
         setCurrentConfiguration({
           ...currentConfiguration,
           ready: true,
         })
       );
+    }
   };
-
-  console.log(currentConfigurationQuantity);
 
   return (
     <div className={styles.wrapper}>
-      <img
-        src="src\assets\pizzaSlice.png"
-        alt="Pizza slice"
-        className={styles.pizzaImg}
-      />
+      <img src={pizzaSlice} alt="Pizza slice" className={styles.pizzaImg} />
       <div className={styles.qtyAndTotalWrapper}>
         <div className={styles.qtyWrapper}>
-          <input
-            type="number"
-            value={currentConfigurationQuantity}
-            onChange={handleQuantityChange}
-          />
+          <input type="number" onChange={handleQuantityChange} value={pizzaQuantity} />
           <span>QTY</span>
         </div>
+
         <div className={styles.orderTotalWrapper}>
           <span className={styles.orderTotal}>
-            {Number.isNaN(currentConfigurationQuantity)
-              ? 0
-              : currentConfigurationTotal.toFixed(2)}
+            {Number.isNaN(currentConfiguration.quantity) ? 0 : currentConfiguration.total.toFixed(2)}
           </span>
           <span className={styles.orderTotalText}>ORDER TOTAL</span>
         </div>
       </div>
+
       <button className={styles.button} onClick={handleConfigurationReady}>
         Buy Pizza! Pizza!
+        <pre className={styles.quantityError}>{errorMessage}</pre>
       </button>
     </div>
   );

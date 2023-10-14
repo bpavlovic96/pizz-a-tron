@@ -1,17 +1,16 @@
 import styles from "./PizzaTopping.module.css";
 import { useDispatch } from "react-redux";
-import {
-  setCurrentConfiguration,
-  setHoveredTopping,
-} from "../../../storage/Slice";
+import { setCurrentConfiguration, setHoveredTopping } from "../../../storage/Slice";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../storage/Slice";
 import { Topping } from "../../../storage/Slice";
 
-const PizzaTopping = ({ topping, emoji, price, id }: Topping) => {
-  const currentConfiguration = useSelector(
-    (state: RootState) => state.storage.currentConfiguration
-  );
+type ToppingExtended = Topping & {
+  key: number;
+};
+
+const PizzaTopping = ({ topping, emoji, price, id }: ToppingExtended) => {
+  const currentConfiguration = useSelector((state: RootState) => state.storage.currentConfiguration);
 
   const dispatch = useDispatch();
 
@@ -24,9 +23,7 @@ const PizzaTopping = ({ topping, emoji, price, id }: Topping) => {
   };
 
   const handleChooseTopping = () => {
-    const isToppingSelected = currentConfiguration.toppings.some(
-      (topping) => topping.id === id
-    );
+    const isToppingSelected = currentConfiguration.toppings.some((topping) => topping.id === id);
 
     if (isToppingSelected === false) {
       const newTopping = { topping, price, emoji, id };
@@ -38,9 +35,7 @@ const PizzaTopping = ({ topping, emoji, price, id }: Topping) => {
         })
       );
     } else {
-      const updatedToppings = currentConfiguration.toppings.filter(
-        (topping) => topping.id !== id
-      );
+      const updatedToppings = currentConfiguration.toppings.filter((topping) => topping.id !== id);
 
       dispatch(
         setCurrentConfiguration({
@@ -51,16 +46,10 @@ const PizzaTopping = ({ topping, emoji, price, id }: Topping) => {
     }
   };
 
-  const isSelected = currentConfiguration.toppings.some(
-    (selectedTopping) => selectedTopping.id === id
-  );
+  const isSelected = currentConfiguration.toppings.some((selectedTopping) => selectedTopping.id === id);
 
   return (
-    <div
-      className={`${styles.toppingsWrapper} ${
-        isSelected ? styles.selectedTopping : null
-      }`}
-    >
+    <div className={`${styles.toppingsWrapper} ${isSelected ? styles.selectedTopping : null}`}>
       <div
         className={styles.topping}
         onMouseEnter={() => handleHover(price, id)}
