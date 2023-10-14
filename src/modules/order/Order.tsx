@@ -41,7 +41,7 @@ function Order() {
         ...currentConfiguration.shippingInformation,
         ...shippingInfo,
       },
-      finished: true,
+      finished: shippingInfo.street !== "" && shippingInfo.city !== "" && shippingInfo.postalCode !== "" ? true : false,
     };
 
     if (shippingInfo !== undefined) {
@@ -75,8 +75,6 @@ function Order() {
       push(userOrderRef, updatedOrderHistory);
     }
   };
-
-  console.log(currentConfiguration, authenticatedUser);
 
   return (
     <div className={styles.orderScreenWrapper}>

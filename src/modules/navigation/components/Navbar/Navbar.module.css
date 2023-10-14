@@ -1,3 +1,9 @@
+.navbarWrapper {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -7,4 +13,19 @@
 
 .logo {
   font-size: 2rem;
+}
+
+.historyButton {
+  position: absolute;
+  left: 75%;
+  top: 2.5rem;
+  width: 12rem;
+  height: 3rem;
+  border: 1px solid #dbdbdb;
+  border-radius: 36px;
+  background-color: var(--colors-tertiary, #b95de4);
+  font-size: 1rem;
+  color: #fff;
+  padding: 0 2rem 0 2rem;
+  cursor: pointer;
 }

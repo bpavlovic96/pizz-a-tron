@@ -8,7 +8,7 @@ import PizzaSize from "../modules/configurator/components/PizzaSize/PizzaSize";
 import Discount from "../modules/configurator/components/Discount/Discount";
 import OrderSummary from "../modules/configurator/components/OrderSummary/OrderSummary";
 import Order from "../modules/order/Order";
-import OrderSuccessful from "../modules/orderSuccessful/OrderSuccessful";
+import OrderSuccessful from "../modules/OrderSuccessful/OrderSuccessful";
 
 function Landing() {
   const [configuratorPopup, setConfiguratorPopup] = useState(false);

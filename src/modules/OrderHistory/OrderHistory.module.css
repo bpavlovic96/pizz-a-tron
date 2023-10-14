@@ -1,0 +1,52 @@
+.modalBackground {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+}
+
+.modalContent {
+  width: 20%;
+  background: white;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.closeButton {
+  width: 6rem;
+  height: 2rem;
+  background: var(--colors-tertiary, #b95de4);
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: #fff;
+  border-radius: 48px;
+  margin-bottom: 1rem;
+}
+
+.orderDetails {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease-out;
+}
+
+.orderDetails.open {
+  max-height: 1000px;
+}
+
+.orderContainer {
+  border: 1px solid var(--border-border-color-light, #dbdbdb);
+  margin-bottom: 0.5rem;
+  padding-left: 0.5rem;
+}
+
+.orderId {
+  cursor: pointer;
+}
