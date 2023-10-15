@@ -1,14 +1,15 @@
 import styles from "./PizzaToppings.module.css";
 import PizzaTopping from "../PizzaTopping/PizzaTopping";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../storage/Slice";
+
 import { useState, useEffect } from "react";
 import { Topping } from "../../../storage/Slice";
+import { useHoveredTopping } from "../../hooks/useHoveredTopping";
+import { useInitialConfiguration } from "../../hooks/useInitialConfiguration";
 
 function PizzaToppings() {
-  const hoveredTopping = useSelector((state: RootState) => state.storage.hoveredTopping);
+  const hoveredTopping = useHoveredTopping();
 
-  const initialConfiguration = useSelector((state: RootState) => state.storage.initialConfiguration);
+  const initialConfiguration = useInitialConfiguration();
 
   const [toppings, setToppings] = useState<Topping[]>([]);
 

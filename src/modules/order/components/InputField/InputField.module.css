@@ -10,7 +10,6 @@
 }
 
 .input {
-  font-feature-settings: "clig" off, "liga" off;
   font-family: Avenir;
   font-size: 1.2rem;
   line-height: 140%;
@@ -22,4 +21,9 @@
 
 .input::placeholder {
   color: var(--text-colors-text-light, #8c8c8c);
+}
+
+.error {
+  font-style: italic;
+  color: red;
 }

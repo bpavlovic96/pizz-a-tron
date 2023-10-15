@@ -1,12 +1,12 @@
 import styles from "./OrderSummary.module.css";
 import pizzaSlice from "../../../../assets/pizzaSlice.png";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../../storage/Slice";
+import { useDispatch } from "react-redux";
 import { useEffect, ChangeEvent, useState } from "react";
 import { setCurrentConfiguration } from "../../../storage/Slice";
+import { useCurrentConfiguration } from "../../hooks/useCurrentConfiguration";
 
 function OrderSummary() {
-  const currentConfiguration = useSelector((state: RootState) => state.storage.currentConfiguration);
+  const currentConfiguration = useCurrentConfiguration();
 
   const dispatch = useDispatch();
 
@@ -20,7 +20,6 @@ function OrderSummary() {
   useEffect(() => {
     dispatch(
       setCurrentConfiguration({
-        ...currentConfiguration,
         quantity: !isNaN(pizzaQuantity) && pizzaQuantity >= 1 ? pizzaQuantity : 0,
       })
     );
@@ -38,7 +37,6 @@ function OrderSummary() {
     if (totalPrice !== currentConfiguration.total) {
       dispatch(
         setCurrentConfiguration({
-          ...currentConfiguration,
           total: Number.isNaN(totalPrice) ? 0 : totalPrice,
         })
       );
@@ -63,7 +61,6 @@ function OrderSummary() {
     } else {
       dispatch(
         setCurrentConfiguration({
-          ...currentConfiguration,
           ready: true,
         })
       );

@@ -28,7 +28,7 @@ export type OrderHistory = {
 
 type AuthenticatedUser = {
   userEmail: string | null;
-  userId: string | null;
+  userId: string | undefined;
   orderHistory: OrderHistory[];
 };
 
@@ -56,7 +56,7 @@ type CurrentSize = {
   price: number;
 };
 
-type ShippingInformation = {
+export type ShippingInformation = {
   street: string;
   city: string;
   postalCode: string;
@@ -71,7 +71,7 @@ export type CurrentConfiguration = {
   quantity: number;
   total: number;
   ready: boolean;
-  shippingInformation: ShippingInformation;
+
   finished: boolean;
 };
 
@@ -95,7 +95,7 @@ const initialState: StorageState = {
     id: null,
   },
   firebaseConfig: {},
-  authenticatedUser: { userEmail: null, userId: null, orderHistory: [] },
+  authenticatedUser: { userEmail: null, userId: undefined, orderHistory: [] },
   initialConfiguration: {
     toppings: [],
     size: { S: 0, M: 0, L: 0 },
@@ -111,7 +111,7 @@ const initialState: StorageState = {
     quantity: 1,
     total: 0,
     ready: false,
-    shippingInformation: { street: "", city: "", postalCode: "", county: "" },
+
     finished: false,
   },
   discountDetails: {
@@ -128,23 +128,23 @@ export const storageSlice = createSlice({
   name: "storage",
   initialState,
   reducers: {
-    setHoveredTopping: (state, action: PayloadAction<HoveredTopping>) => {
-      state.hoveredTopping = action.payload;
+    setHoveredTopping: (state, action: PayloadAction<Partial<HoveredTopping>>) => {
+      state.hoveredTopping = { ...state.hoveredTopping, ...action.payload };
     },
     setFirebaseConfig: (state, action: PayloadAction<FirebaseConfig>) => {
-      state.firebaseConfig = action.payload;
+      state.firebaseConfig = { ...state.firebaseConfig, ...action.payload };
     },
-    setAuthenticatedUser: (state, action: PayloadAction<AuthenticatedUser>) => {
-      state.authenticatedUser = action.payload;
+    setAuthenticatedUser: (state, action: PayloadAction<Partial<AuthenticatedUser>>) => {
+      state.authenticatedUser = { ...state.authenticatedUser, ...action.payload };
     },
-    setInitialConfiguration: (state, action: PayloadAction<InitialConfiguration>) => {
-      state.initialConfiguration = action.payload;
+    setInitialConfiguration: (state, action: PayloadAction<Partial<InitialConfiguration>>) => {
+      state.initialConfiguration = { ...state.initialConfiguration, ...action.payload };
     },
-    setCurrentConfiguration: (state, action: PayloadAction<CurrentConfiguration>) => {
-      state.currentConfiguration = action.payload;
+    setCurrentConfiguration: (state, action: PayloadAction<Partial<CurrentConfiguration>>) => {
+      state.currentConfiguration = { ...state.currentConfiguration, ...action.payload };
     },
-    setDiscountDetails: (state, action: PayloadAction<DiscountDetails>) => {
-      state.discountDetails = action.payload;
+    setDiscountDetails: (state, action: PayloadAction<Partial<DiscountDetails>>) => {
+      state.discountDetails = { ...state.discountDetails, ...action.payload };
     },
   },
 });

@@ -1,14 +1,13 @@
-import { useSelector } from "react-redux";
 import OrderHistoryModal from "../../../OrderHistory/OrderHistory";
 import HomeLogin from "../../../authentication/components/EmailLogin/HomeLogin/HomeLogin";
 import styles from "./Navbar.module.css";
-import { RootState } from "../../../storage/Slice";
 import { useState } from "react";
+import { useAuthenticatedUser } from "../../../configurator/hooks/useAuthenticatedUser";
 
-type HandleHistory = () => void;
+export type HandleHistory = () => void;
 
 function Navbar() {
-  const authenticatedUser = useSelector((state: RootState) => state.storage.authenticatedUser);
+  const authenticatedUser = useAuthenticatedUser();
   const [orderHistoryClicked, setOrderHistoryClicked] = useState(false);
 
   const handleHistory: HandleHistory = () => {

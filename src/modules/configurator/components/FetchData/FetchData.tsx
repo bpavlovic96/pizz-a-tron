@@ -1,12 +1,13 @@
 import { useEffect, useCallback } from "react";
-import { OrderHistory, RootState, setAuthenticatedUser, setInitialConfiguration } from "../../../storage/Slice";
-import { useDispatch, useSelector } from "react-redux";
+import { OrderHistory, setAuthenticatedUser, setInitialConfiguration } from "../../../storage/Slice";
+import { useDispatch } from "react-redux";
 import { ref, onValue } from "firebase/database";
 import { db } from "../../../authentication/components/FirebaseInit/FirebaseInit";
 import { InitialConfiguration } from "../../../storage/Slice";
+import { useAuthenticatedUser } from "../../hooks/useAuthenticatedUser";
 
 function FetchData() {
-  const authenticatedUser = useSelector((state: RootState) => state.storage.authenticatedUser);
+  const authenticatedUser = useAuthenticatedUser();
   const dispatch = useDispatch();
 
   const fetchData = useCallback(() => {
@@ -33,7 +34,6 @@ function FetchData() {
 
             dispatch(
               setAuthenticatedUser({
-                ...authenticatedUser,
                 orderHistory: Object.values(fetchedOrderHistory),
               })
             );
@@ -50,7 +50,7 @@ function FetchData() {
   useEffect(() => {
     if (authenticatedUser.userId) fetchOrderHistory();
   }, [authenticatedUser.userId]);
-
+  console.log(authenticatedUser.userId);
   return <></>;
 }
 

@@ -1,16 +1,14 @@
-import { useSelector } from "react-redux";
-import { RootState } from "../storage/Slice";
 import styles from "./OrderHistory.module.css";
 import { HandleHistory } from "../navigation/components/Navbar/Navbar";
 import { useState } from "react";
+import { useAuthenticatedUser } from "../configurator/hooks/useAuthenticatedUser";
 
 type HandleHistoryProp = {
   handleHistory: HandleHistory;
 };
 
 function OrderHistoryModal({ handleHistory }: HandleHistoryProp) {
-  const authenticatedUser = useSelector((state: RootState) => state.storage.authenticatedUser);
-
+  const authenticatedUser = useAuthenticatedUser();
   const [showOrderDetails, setShowOrderDetails] = useState<boolean[]>(
     Array(authenticatedUser.orderHistory.length).fill(false)
   );
@@ -36,7 +34,7 @@ function OrderHistoryModal({ handleHistory }: HandleHistoryProp) {
               <div className={`${styles.orderDetails} ${showOrderDetails[index] ? styles.open : ""}`}>
                 <p>Toppings:</p>
                 <ul>
-                  {order.toppings.map((topping, toppingIndex) => (
+                  {order.toppings?.map((topping, toppingIndex) => (
                     <li key={toppingIndex}>
                       Topping: {topping.topping} {topping.emoji}, Price: {topping.price}
                     </li>

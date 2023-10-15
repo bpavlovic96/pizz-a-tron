@@ -2,13 +2,12 @@ import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import styles from "./GoogleLogin.module.css";
 import { useState } from "react";
 import { GoogleModalProps } from "../EmailLogin/LoginModal/LoginModal";
-import { RootState } from "../../../storage/Slice";
-import { useSelector } from "react-redux";
+import { useAuthenticatedUser } from "../../../configurator/hooks/useAuthenticatedUser";
 
 const GoogleLogin: React.FC<GoogleModalProps> = ({ closeLoginModal }) => {
   const [googleLoginStatus, setGoogleLoginStatus] = useState("");
 
-  const authenticatedUser = useSelector((state: RootState) => state.storage.authenticatedUser);
+  const authenticatedUser = useAuthenticatedUser();
 
   const provider = new GoogleAuthProvider();
   const auth = getAuth();

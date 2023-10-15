@@ -1,13 +1,13 @@
 import styles from "./PizzaSize.module.css";
-import { useSelector } from "react-redux";
-import { RootState, setCurrentConfiguration } from "../../../storage/Slice";
+import { setCurrentConfiguration } from "../../../storage/Slice";
 import { useDispatch } from "react-redux";
 import { useCallback } from "react";
+import { useCurrentConfiguration } from "../../hooks/useCurrentConfiguration";
+import { useInitialConfiguration } from "../../hooks/useInitialConfiguration";
 
 function PizzaSize() {
-  const currentConfiguration = useSelector((state: RootState) => state.storage.currentConfiguration);
-
-  const initialConfiguration = useSelector((state: RootState) => state.storage.initialConfiguration);
+  const currentConfiguration = useCurrentConfiguration();
+  const initialConfiguration = useInitialConfiguration();
 
   const dispatch = useDispatch();
 
@@ -15,7 +15,6 @@ function PizzaSize() {
     (e: React.MouseEvent<HTMLButtonElement>) => {
       const value = (e.target as HTMLButtonElement).innerText;
       const updatedConfiguration = {
-        ...currentConfiguration,
         size: { size: value, price: initialConfiguration.size[value] || 0 },
       };
       dispatch(setCurrentConfiguration(updatedConfiguration));

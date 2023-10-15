@@ -1,14 +1,17 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import styles from "./DiscountButton.module.css";
-import { RootState, setCurrentConfiguration, setDiscountDetails } from "../../../../storage/Slice";
+import { setCurrentConfiguration, setDiscountDetails } from "../../../../storage/Slice";
 import { useState, ChangeEvent, useEffect } from "react";
+import { useCurrentConfiguration } from "../../../hooks/useCurrentConfiguration";
+import { useInitialConfiguration } from "../../../hooks/useInitialConfiguration";
+import { useDiscountDetails } from "../../../hooks/useDiscountDetails";
 
 function DiscountButton() {
   const dispatch = useDispatch();
-  const initialConfiguration = useSelector((state: RootState) => state.storage.initialConfiguration);
-  const currentConfiguration = useSelector((state: RootState) => state.storage.currentConfiguration);
+  const initialConfiguration = useInitialConfiguration();
+  const currentConfiguration = useCurrentConfiguration();
 
-  const discountDetails = useSelector((state: RootState) => state.storage.discountDetails);
+  const discountDetails = useDiscountDetails();
 
   const [inputValue, setInputValue] = useState("");
 
@@ -23,7 +26,6 @@ function DiscountButton() {
       if (lowerCaseInput.includes(key.toLowerCase())) {
         dispatch(
           setCurrentConfiguration({
-            ...currentConfiguration,
             discount: initialConfiguration.discount[key],
           })
         );
@@ -41,7 +43,6 @@ function DiscountButton() {
   useEffect(() => {
     if (discountDetails.isDiscountApplied) {
       const updatedConfiguration = {
-        ...currentConfiguration,
         total: currentConfiguration.total * (1 - currentConfiguration.discount),
       };
 

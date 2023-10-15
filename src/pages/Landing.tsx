@@ -1,21 +1,21 @@
 import PizzaToppings from "../modules/configurator/components/PizzaToppings/PizzaToppings";
 import Navbar from "../modules/navigation/components/Navbar/Navbar";
 import styles from "./Landing.module.css";
-import { useSelector } from "react-redux/es/hooks/useSelector";
-import { RootState } from "../modules/storage/Slice";
 import { useState, useEffect } from "react";
 import PizzaSize from "../modules/configurator/components/PizzaSize/PizzaSize";
 import Discount from "../modules/configurator/components/Discount/Discount";
 import OrderSummary from "../modules/configurator/components/OrderSummary/OrderSummary";
 import Order from "../modules/order/Order";
 import OrderSuccessful from "../modules/OrderSuccessful/OrderSuccessful";
+import { useCurrentConfiguration } from "../modules/configurator/hooks/useCurrentConfiguration";
+import { useAuthenticatedUser } from "../modules/configurator/hooks/useAuthenticatedUser";
 
 function Landing() {
   const [configuratorPopup, setConfiguratorPopup] = useState(false);
 
-  const authenticatedUser = useSelector((state: RootState) => state.storage.authenticatedUser);
+  const authenticatedUser = useAuthenticatedUser();
 
-  const currentConfiguration = useSelector((state: RootState) => state.storage.currentConfiguration);
+  const currentConfiguration = useCurrentConfiguration();
 
   useEffect(() => {
     authenticatedUser.userEmail ? setConfiguratorPopup(true) : setConfiguratorPopup(false);

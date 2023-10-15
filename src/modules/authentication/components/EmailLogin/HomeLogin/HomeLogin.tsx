@@ -1,13 +1,14 @@
 import styles from "./HomeLogin.module.css";
 import { useEffect, useState } from "react";
 import LoginModal from "../LoginModal/LoginModal";
-import { useSelector } from "react-redux";
-import { RootState, setAuthenticatedUser, setCurrentConfiguration } from "../../../../storage/Slice";
+import { setAuthenticatedUser, setCurrentConfiguration } from "../../../../storage/Slice";
 import SignupModal from "../SignupModal/SignupModal";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { useDispatch } from "react-redux";
 import { auth } from "../../FirebaseInit/FirebaseInit";
 import { v4 as uuidv4 } from "uuid";
+import { useCurrentConfiguration } from "../../../../configurator/hooks/useCurrentConfiguration";
+import { useAuthenticatedUser } from "../../../../configurator/hooks/useAuthenticatedUser";
 
 export type LoginModalProps = {
   isLoginOpen: boolean;
@@ -34,15 +35,15 @@ function HomeLogin() {
   const [isSignupOpen, setIsSignupOpen] = useState(false);
 
   const dispatch = useDispatch();
-  const authenticatedUser = useSelector((state: RootState) => state.storage.authenticatedUser);
-  const currentConfiguration = useSelector((state: RootState) => state.storage.currentConfiguration);
+  const authenticatedUser = useAuthenticatedUser();
+  const currentConfiguration = useCurrentConfiguration();
 
   useEffect(() => {
     const listenAuth = onAuthStateChanged(auth, (user) => {
       if (user) {
-        dispatch(setAuthenticatedUser({ ...authenticatedUser, userEmail: user.email, userId: user.uid }));
+        dispatch(setAuthenticatedUser({ userEmail: user.email, userId: user.uid }));
       } else {
-        dispatch(setAuthenticatedUser({ ...authenticatedUser, userEmail: null, userId: null }));
+        dispatch(setAuthenticatedUser({ userEmail: null, userId: null }));
       }
       return () => {
         listenAuth();
@@ -78,8 +79,8 @@ function HomeLogin() {
     const newId = uuidv4();
 
     authenticatedUser.userEmail && currentConfiguration.id === ""
-      ? dispatch(setCurrentConfiguration({ ...currentConfiguration, id: newId }))
-      : dispatch(setCurrentConfiguration({ ...currentConfiguration, id: "" }));
+      ? dispatch(setCurrentConfiguration({ id: newId }))
+      : dispatch(setCurrentConfiguration({ id: "" }));
   }, [authenticatedUser.userEmail]);
 
   return (

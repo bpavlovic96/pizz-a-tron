@@ -1,16 +1,15 @@
 import styles from "./PizzaTopping.module.css";
 import { useDispatch } from "react-redux";
 import { setCurrentConfiguration, setHoveredTopping } from "../../../storage/Slice";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../storage/Slice";
 import { Topping } from "../../../storage/Slice";
+import { useCurrentConfiguration } from "../../hooks/useCurrentConfiguration";
 
 type ToppingExtended = Topping & {
   key: number;
 };
 
 const PizzaTopping = ({ topping, emoji, price, id }: ToppingExtended) => {
-  const currentConfiguration = useSelector((state: RootState) => state.storage.currentConfiguration);
+  const currentConfiguration = useCurrentConfiguration();
 
   const dispatch = useDispatch();
 
@@ -30,7 +29,6 @@ const PizzaTopping = ({ topping, emoji, price, id }: ToppingExtended) => {
 
       dispatch(
         setCurrentConfiguration({
-          ...currentConfiguration,
           toppings: [...currentConfiguration.toppings, newTopping],
         })
       );
@@ -39,7 +37,6 @@ const PizzaTopping = ({ topping, emoji, price, id }: ToppingExtended) => {
 
       dispatch(
         setCurrentConfiguration({
-          ...currentConfiguration,
           toppings: updatedToppings,
         })
       );
