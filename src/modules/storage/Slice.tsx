@@ -28,7 +28,7 @@ export type OrderHistory = {
 
 type AuthenticatedUser = {
   userEmail: string | null;
-  userId: string | undefined;
+  userId: string;
   orderHistory: OrderHistory[];
 };
 
@@ -95,7 +95,7 @@ const initialState: StorageState = {
     id: null,
   },
   firebaseConfig: {},
-  authenticatedUser: { userEmail: null, userId: undefined, orderHistory: [] },
+  authenticatedUser: { userEmail: null, userId: "", orderHistory: [] },
   initialConfiguration: {
     toppings: [],
     size: { S: 0, M: 0, L: 0 },

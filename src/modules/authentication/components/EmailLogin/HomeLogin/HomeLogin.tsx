@@ -43,7 +43,7 @@ function HomeLogin() {
       if (user) {
         dispatch(setAuthenticatedUser({ userEmail: user.email, userId: user.uid }));
       } else {
-        dispatch(setAuthenticatedUser({ userEmail: null, userId: null }));
+        dispatch(setAuthenticatedUser({ userEmail: null, userId: "" }));
       }
       return () => {
         listenAuth();

@@ -26,7 +26,7 @@ const GoogleLogin: React.FC<GoogleModalProps> = ({ closeLoginModal }) => {
 
   return (
     <>
-      {authenticatedUser.userEmail || authenticatedUser.userId === null ? (
+      {authenticatedUser.userEmail || !authenticatedUser.userId ? (
         <button className={styles.button} onClick={handleGoogleLogin}>
           Log in with Google?
         </button>

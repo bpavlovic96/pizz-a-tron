@@ -21,36 +21,32 @@ function FetchData() {
     });
   }, [dispatch]);
 
-  const fetchOrderHistory = useCallback(() => {
+  useEffect(() => {
     const dataRef = ref(db, "/");
     onValue(dataRef, (snapshot) => {
       const data = snapshot.val();
-      if (data) {
-        if (authenticatedUser.userId) {
-          const userOrders = data.users[authenticatedUser.userId];
+      const userOrders = data.users[authenticatedUser.userId];
+      console.log(data.users[authenticatedUser.userId]);
+      if (data.users[authenticatedUser.userId]) {
+        if (userOrders && userOrders.orders) {
+          const fetchedOrderHistory = userOrders.orders as OrderHistory[];
 
-          if (userOrders && userOrders.orders) {
-            const fetchedOrderHistory = userOrders.orders as OrderHistory[];
-
-            dispatch(
-              setAuthenticatedUser({
-                orderHistory: Object.values(fetchedOrderHistory),
-              })
-            );
-          }
+          dispatch(
+            setAuthenticatedUser({
+              orderHistory: Object.values(fetchedOrderHistory),
+            })
+          );
         }
       }
     });
-  }, [authenticatedUser, dispatch]);
+  }, [authenticatedUser.userId]);
 
   useEffect(() => {
     fetchData();
-  }, [fetchData]);
+  }, []);
 
-  useEffect(() => {
-    if (authenticatedUser.userId) fetchOrderHistory();
-  }, [authenticatedUser.userId]);
-  console.log(authenticatedUser.userId);
+  console.log(authenticatedUser.orderHistory);
+
   return <></>;
 }
 

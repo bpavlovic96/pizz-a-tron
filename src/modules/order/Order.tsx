@@ -24,7 +24,6 @@ function Order() {
   } = useForm<ShippingInformation>({ defaultValues: { street: "", city: "", postalCode: "", county: "" } });
 
   const onSubmit: SubmitHandler<ShippingInformation> = (data) => {
-    console.log(data);
     const newShippingInformation = {
       ...data,
     };
