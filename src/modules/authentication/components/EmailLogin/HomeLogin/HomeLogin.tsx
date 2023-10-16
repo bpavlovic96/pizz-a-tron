@@ -7,7 +7,6 @@ import { onAuthStateChanged, signOut } from "firebase/auth";
 import { useDispatch } from "react-redux";
 import { auth } from "../../FirebaseInit/FirebaseInit";
 import { v4 as uuidv4 } from "uuid";
-import { useCurrentConfiguration } from "../../../../configurator/hooks/useCurrentConfiguration";
 import { useAuthenticatedUser } from "../../../../configurator/hooks/useAuthenticatedUser";
 
 export type LoginModalProps = {
@@ -36,7 +35,6 @@ function HomeLogin() {
 
   const dispatch = useDispatch();
   const authenticatedUser = useAuthenticatedUser();
-  const currentConfiguration = useCurrentConfiguration();
 
   useEffect(() => {
     const listenAuth = onAuthStateChanged(auth, (user) => {
@@ -78,10 +76,10 @@ function HomeLogin() {
   useEffect(() => {
     const newId = uuidv4();
 
-    authenticatedUser.userEmail && currentConfiguration.id === ""
+    authenticatedUser.userEmail
       ? dispatch(setCurrentConfiguration({ id: newId }))
       : dispatch(setCurrentConfiguration({ id: "" }));
-  }, [authenticatedUser.userEmail]);
+  }, [authenticatedUser.userEmail, dispatch]);
 
   return (
     <>

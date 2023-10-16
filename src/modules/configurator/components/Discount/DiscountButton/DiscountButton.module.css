@@ -77,3 +77,11 @@
   font-weight: 400;
   color: rgb(0, 114, 15);
 }
+
+.discountWrongMessage {
+  position: absolute;
+  top: 5rem;
+  font-style: italic;
+  font-weight: 400;
+  color: rgb(114, 0, 0);
+}

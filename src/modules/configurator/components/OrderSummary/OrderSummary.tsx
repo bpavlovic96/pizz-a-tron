@@ -14,7 +14,8 @@ function OrderSummary() {
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleQuantityChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setPizzaQuantity(parseInt(e.target.value, 10));
+    const inputValue = e.target.value;
+    setPizzaQuantity(parseInt(inputValue, 10));
   };
 
   useEffect(() => {
@@ -41,7 +42,14 @@ function OrderSummary() {
         })
       );
     }
-  }, [currentConfiguration, dispatch]);
+  }, [
+    currentConfiguration.toppings,
+    currentConfiguration.size.price,
+    currentConfiguration.quantity,
+    currentConfiguration.discount,
+    currentConfiguration.total,
+    dispatch,
+  ]);
 
   const handleConfigurationReady = () => {
     if (currentConfiguration.size.size === "" && isNaN(currentConfiguration.quantity)) {
@@ -72,7 +80,7 @@ function OrderSummary() {
       <img src={pizzaSlice} alt="Pizza slice" className={styles.pizzaImg} />
       <div className={styles.qtyAndTotalWrapper}>
         <div className={styles.qtyWrapper}>
-          <input type="number" onChange={handleQuantityChange} value={pizzaQuantity} />
+          <input type="number" onChange={handleQuantityChange} defaultValue={1} />
           <span>QTY</span>
         </div>
 

@@ -111,7 +111,6 @@ const initialState: StorageState = {
     quantity: 1,
     total: 0,
     ready: false,
-
     finished: false,
   },
   discountDetails: {

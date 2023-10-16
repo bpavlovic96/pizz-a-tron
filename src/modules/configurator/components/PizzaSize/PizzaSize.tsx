@@ -19,7 +19,7 @@ function PizzaSize() {
       };
       dispatch(setCurrentConfiguration(updatedConfiguration));
     },
-    [currentConfiguration, dispatch, initialConfiguration.size]
+    [dispatch, initialConfiguration.size]
   );
 
   return (

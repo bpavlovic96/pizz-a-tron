@@ -50,12 +50,7 @@ const LoginModal: React.FC<LoginModalProps> = ({
       <div className={styles.modalContent}>
         <h2 className={styles.header}>Log in to your account to continue.</h2>
         <div className={styles.inputs}>
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
+          <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
           <input
             type="password"
             placeholder="Password"
@@ -77,10 +72,8 @@ const LoginModal: React.FC<LoginModalProps> = ({
         </div>
         <GoogleLogin closeLoginModal={closeLoginModal} />
         <p
-          className={`${styles.loginButton} ${
-            loggedIn === "Sucessfully logged in."
-              ? styles.success
-              : styles.failure
+          className={`${styles.loginMessage} ${
+            loggedIn === "Sucessfully logged in." ? styles.success : styles.failure
           }`}
         >
           {loggedIn}

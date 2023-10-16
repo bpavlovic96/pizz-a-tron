@@ -1,7 +1,7 @@
 import { useDispatch } from "react-redux";
 import styles from "./DiscountButton.module.css";
 import { setCurrentConfiguration, setDiscountDetails } from "../../../../storage/Slice";
-import { useState, ChangeEvent, useEffect } from "react";
+import { useState, ChangeEvent } from "react";
 import { useCurrentConfiguration } from "../../../hooks/useCurrentConfiguration";
 import { useInitialConfiguration } from "../../../hooks/useInitialConfiguration";
 import { useDiscountDetails } from "../../../hooks/useDiscountDetails";
@@ -14,6 +14,7 @@ function DiscountButton() {
   const discountDetails = useDiscountDetails();
 
   const [inputValue, setInputValue] = useState("");
+  const [discountMessage, setDiscountMessage] = useState("");
 
   const getInputDiscount = (e: ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
@@ -29,26 +30,21 @@ function DiscountButton() {
             discount: initialConfiguration.discount[key],
           })
         );
-        dispatch(
-          setDiscountDetails({
-            isDiscountApplied: true,
-            discountWord: inputValue,
-          })
-        );
+        if (!discountDetails.isDiscountApplied) {
+          dispatch(
+            setDiscountDetails({
+              isDiscountApplied: true,
+              discountWord: inputValue,
+            })
+          );
+          setDiscountMessage("");
+        }
         break;
+      } else {
+        setDiscountMessage("Your discount code is invalid.");
       }
     }
   };
-
-  useEffect(() => {
-    if (discountDetails.isDiscountApplied) {
-      const updatedConfiguration = {
-        total: currentConfiguration.total * (1 - currentConfiguration.discount),
-      };
-
-      dispatch(setCurrentConfiguration(updatedConfiguration));
-    }
-  }, [currentConfiguration.discount, discountDetails.isDiscountApplied, dispatch]);
 
   return (
     <div className={styles.wrapper}>
@@ -69,11 +65,12 @@ function DiscountButton() {
           Apply
         </button>
       </div>
-      <p className={styles.discountMessage}>
-        {discountDetails.isDiscountApplied
-          ? `Your discount of ${currentConfiguration.discount * 100}% has been applied!`
-          : null}
-      </p>
+      {discountDetails.isDiscountApplied && (
+        <p className={styles.discountMessage}>
+          Your discount of ${currentConfiguration.discount * 100}% has been applied!
+        </p>
+      )}
+      {discountMessage && <p className={styles.discountWrongMessage}>{discountMessage}</p>}
     </div>
   );
 }

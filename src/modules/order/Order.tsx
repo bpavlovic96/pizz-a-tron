@@ -52,6 +52,31 @@ function Order() {
     setToppingsList([toppingsArray]);
   }, [currentConfiguration.toppings]);
 
+  useEffect(() => {
+    let toppingsPrice = 0;
+    currentConfiguration.toppings.map((topping) => (toppingsPrice += topping.price));
+
+    const totalPrice =
+      (currentConfiguration.size.price + toppingsPrice) *
+      currentConfiguration.quantity *
+      (1 - currentConfiguration.discount);
+
+    if (totalPrice !== currentConfiguration.total) {
+      dispatch(
+        setCurrentConfiguration({
+          total: Number.isNaN(totalPrice) ? 0 : totalPrice,
+        })
+      );
+    }
+  }, [
+    currentConfiguration.discount,
+    currentConfiguration.quantity,
+    currentConfiguration.size.price,
+    currentConfiguration.toppings,
+    currentConfiguration.total,
+    dispatch,
+  ]);
+
   return (
     <div className={styles.orderScreenWrapper}>
       <h2 className={styles.header}>Almost done!</h2>
